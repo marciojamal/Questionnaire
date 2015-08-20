@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+<ui:composition>
+	<div class="header">
+			<h:outputLink value="index.jsf" >
+				<h:graphicImage library="images" name="logo.png" alt="Questionnaire" styleClass="logo"  />
+				
+			</h:outputLink>
+			<h1>Questionários</h1>
+			<div id="loginUser">
+				<h:form>
+				<h:outputText value="#{userBean.message}" style="color:red;"/>
+					<h:panelGroup rendered="#{empty userBean.email}">
+						<h:inputText value="#{userBean.email}" placeholder="Email" styleClass="inputEmail"/>
+						<h:commandButton value="OK" >
+							<f:ajax execute="@form" listener="#{userBean.login}" render="@form" onevent="listenerEvent"/>
+						</h:commandButton>
+					</h:panelGroup>
+					<h:panelGroup rendered="#{not empty userBean.email}">
+						<label>Olá, #{userBean.email}</label>
+						<h:commandButton value="Sair">
+							<f:ajax execute="@form" listener="#{userBean.logout}" render="@form" onevent="listenerEvent"/>
+						</h:commandButton>
+					</h:panelGroup>
+				</h:form>
+			</div>
+
+	</div>
+</ui:composition>
+
+</html>
+

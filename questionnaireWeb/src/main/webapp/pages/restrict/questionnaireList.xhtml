@@ -1,0 +1,63 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<ui:composition template="includes/template.xhtml">
+	<ui:define name="conteudo">
+		<h:form id="userTableForm">
+			<p:panel styleClass="container" id="listUserpanel" header="Lista de Questionários">
+
+				<p:dataTable styleClass="listTable" var="questionnaire" value="#{adminQuestionnaireBean.questionnaires}" paginator="true" rows="15" 
+					rowsPerPageTemplate="15,30,45"  id="questionnaireTable" lazy="true" rendered="#{not empty adminQuestionnaireBean.questionnaires}">
+
+					<p:column headerText="Nome" >
+					 	<h:link outcome="questionList.jsf?questionnaireId=#{questionnaire.id}">
+							<h:outputText value="#{questionnaire.name}" />
+						</h:link>
+					</p:column>
+
+					<p:column headerText="Publicado" >
+						<h:outputText value="#{questionnaire.published == true? 'Sim' : 'Não'}" />
+					</p:column>
+					
+					<p:column headerText="Data da criação"  >
+						<h:outputText value="#{questionnaire.creationDate}" >
+							<f:convertDateTime pattern="dd/MM/yyyy hh:mm:ss" type="date" locale="pt_BR" timeZone="America/Sao_Paulo" />
+						</h:outputText>
+					</p:column>
+					
+					<p:column styleClass="editColum">
+						<p:button icon="ui-icon-pencil" styleClass="edit-icon" outcome="createQuestionnaire" id="edit-icon" value="Editar" process="@this">
+							<f:param name="questionnaireId" value="#{questionnaire.id}" />
+						</p:button>
+					</p:column>
+					
+					<p:column styleClass="editColum">	
+						<p:commandButton icon="ui-icon-trash" styleClass="edit-icon" id="remove-icon" value="Excluir" process="@this" 
+							action="#{adminQuestionnaireBean.removeQuestionnaire()}" disabled="#{not empty questionnaire.answers}"  update=":userTableForm :messages">
+							<f:setPropertyActionListener target="#{adminQuestionnaireBean.beanQuestionnaire}" value="#{questionnaire}" />
+							<p:confirm header="Confirmar Exclusão" message="Deseja realmente excluir essa questão?" icon="ui-icon-alert" />
+						</p:commandButton>
+						<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">  
+					        <p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>  
+					        <p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>       
+					    </p:confirmDialog> 
+					</p:column> 
+					
+
+				</p:dataTable>
+				<h:outputLabel value="Não há questionário cadastrado." rendered="#{empty adminQuestionnaireBean.questionnaires}"/>
+				<div class="newObjectButton">
+					<p:button  outcome="createQuestionnaire" value="Novo" icon="ui-icon-plus" >
+					</p:button>
+				</div>
+
+			</p:panel>
+			
+
+		</h:form>
+
+	</ui:define>
+</ui:composition>
+</html>

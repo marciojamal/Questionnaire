@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<ui:composition template="includes/template.xhtml">
+	<ui:define name="conteudo">
+		<h:form id="userTableForm">
+			<p:panel styleClass="container" id="listUserpanel" header="Lista de usuarios">
+
+				<p:dataTable styleClass="listTable" var="userAnswer" value="#{adminUserBean.userAnswers}" paginator="true" rows="15" 
+					rowsPerPageTemplate="15,30,45"  id="userAnswerTable" lazy="true" rendered="#{not empty adminUserBean.userAnswers}">
+
+					<p:column headerText="Nome" >
+					 	<h:link outcome="userQuestionnaireList.jsf?userId=#{userAnswer.id}">
+							<h:outputText value="#{userAnswer.email}" />
+						</h:link>
+					</p:column>
+
+					
+					<p:column headerText="Data da criação"  >
+						<h:outputText value="#{userAnswer.creationDate}" >
+							<f:convertDateTime pattern="dd/MM/yyyy hh:mm:ss" type="date" locale="pt_BR" timeZone="America/Sao_Paulo" />
+						</h:outputText>
+					</p:column>
+
+				</p:dataTable>
+				<h:outputLabel value="Não há questionário usuario cadastrado." rendered="#{empty adminUserBean.userAnswers}"/>
+
+			</p:panel>
+			
+
+		</h:form>
+
+	</ui:define>
+</ui:composition>
+</html>

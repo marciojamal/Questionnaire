@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core">
+
+<ui:composition template="includes/template.xhtml">
+
+	<ui:define name="conteudo">
+		<div class="content">
+			<h1>#{answerBean.questionnaire.name}</h1>
+			<h:form>
+			<ui:repeat var="question" value="#{answerBean.questionnaire.questions}" varStatus="statusRepeat">
+			<h3>#{statusRepeat.index +1}) #{question.question}</h3>
+			
+<!-- 			Aberta -->
+			<div class="question">
+				<ui:repeat var="an" value="#{answerBean.getAnswerByQUestionId(question.id, question.questionType.id)}">
+						<p>#{an}</p>
+				</ui:repeat>
+			</div>
+			
+			<hr/>
+			</ui:repeat>
+			</h:form>
+		</div>
+
+	</ui:define>
+
+</ui:composition>
+</html>

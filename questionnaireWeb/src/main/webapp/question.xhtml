@@ -1,0 +1,57 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core">
+
+<ui:composition template="includes/template.xhtml">
+
+	<ui:define name="conteudo">
+		<div class="content">
+			<h1>#{questionBean.questionnaireVO.name}</h1>
+			<h:form>
+			<ui:repeat var="question" value="#{questionBean.questionnaireVO.questions}" varStatus="statusRepeat">
+			<h3>#{statusRepeat.index +1}) #{question.question}</h3>
+			
+<!-- 			Aberta -->
+			<h:panelGroup id="aberta" rendered="#{question.questionType.id == 1}">
+				<div class="question">
+					<h:inputTextarea value="#{question.answer.openQuestion}" />
+				</div>
+			</h:panelGroup>
+			
+<!-- 			1 Opções -->
+			<h:panelGroup id="umaOpcao" rendered="#{question.questionType.id == 2}">
+			
+				<div class="question">
+				<h:selectOneRadio value="#{question.answer.optionId}" layout="pageDirection">
+					<f:selectItems var="options" value="#{question.options}" itemLabel="#{options.description}" itemValue="#{options.id}"/>
+				</h:selectOneRadio>
+				</div>
+			</h:panelGroup>
+			
+<!-- 			N Opções -->
+			<h:panelGroup id="nOpcoes" rendered="#{question.questionType.id == 3}" >
+			
+				<div class="question">
+				<h:selectManyCheckbox value="#{question.answer.optionIds}" layout="pageDirection">
+					<f:selectItems var="options" value="#{question.options}" itemLabel="#{options.description}" itemValue="#{options.id}"/>
+				</h:selectManyCheckbox>
+					
+					
+				</div>
+			</h:panelGroup>
+	
+			<hr/>
+			</ui:repeat>
+				<h:messages globalOnly="true"  style="color:red" id="message"/>
+				<div class="questionButton">
+					<h:commandButton id="btSend" value="Enviar" action="#{questionBean.saveAnswers}" >
+					</h:commandButton>
+				</div>
+			</h:form>
+		</div>
+
+	</ui:define>
+
+</ui:composition>
+</html>

@@ -1,0 +1,138 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<ui:composition template="includes/template.xhtml">
+	<ui:define name="conteudo">
+		<h:form id="questionTableForm">
+			<p:panel styleClass="container" id="listQuestionPanel" header="Questões: #{adminQuestionBean.questionnaire.name}">
+
+				<p:dataTable styleClass="listTable" var="question" value="#{adminQuestionBean.questions}" paginator="true" rows="15"
+					rowsPerPageTemplate="15,30,45" id="QuestionTable" lazy="true" rendered="#{not empty adminQuestionBean.questions}">
+
+					<p:column headerText="Nome"  >
+						<h:outputText value="#{question.question}" />
+					</p:column>
+
+					<p:column headerText="Tipo" >
+						<h:outputText value="#{question.questionType.name}" />
+					</p:column>
+					
+					<p:column headerText="Data"  >
+						<h:outputText value="#{question.creationDate}" >
+							<f:convertDateTime pattern="dd/MM/yyyy hh:mm:ss" type="date" locale="pt_BR" timeZone="America/Sao_Paulo" />
+						</h:outputText>
+					</p:column>
+					<p:column styleClass="editColum">
+						<p:commandButton icon="ui-icon-pencil" styleClass="edit-icon" onclick="PF('dlgQuestion').show()" id="edit-icon" value="Editar" process="@this" 
+						actionListener="#{adminQuestionBean.resetQuestion()}" disabled="#{not empty adminQuestionBean.questionnaire.answers}"  update=":formQuestion">
+							<f:param name="questionId" value="#{question.id}" />
+							<f:param name="questionnaireId" value="#{adminQuestionBean.questionnaire.id}" />
+						</p:commandButton>
+					</p:column>
+					<p:column styleClass="editColum">
+						<p:commandButton icon="ui-icon-trash" styleClass="edit-icon" id="remove-icon" value="Excluir" process="@this" 
+							action="#{adminQuestionBean.removeQuestion()}" disabled="#{not empty adminQuestionBean.questionnaire.answers}"  update=":questionTableForm :messages">
+							<f:setPropertyActionListener target="#{adminQuestionBean.beanQuestion}" value="#{question}" />
+							<p:confirm header="Confirmar Exclusão" message="Deseja realmente excluir essa questão?" icon="ui-icon-alert" />
+						</p:commandButton>
+						<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">  
+					        <p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>  
+					        <p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>       
+					    </p:confirmDialog> 
+					</p:column> 
+					
+
+				</p:dataTable>
+				<h:outputLabel value="Não há questões cadastradas." rendered="#{empty adminQuestionBean.questions}"/>
+				<div class="newObjectButton">
+					<p:commandButton value="Adicionar"  onclick="PF('dlgQuestion').show()"  update=":formQuestion" > 
+					<f:param name="questionId" value="0" />
+		    		</p:commandButton>
+				
+				
+				<div class="newObjectButtonLeft">
+					<p:commandButton  styleClass="edit-icon" id="publish-icon" value="Publicar" process="@this" 
+						action="#{adminQuestionBean.publish()}" rendered="#{not adminQuestionBean.questionnaire.published}"  update=":questionTableForm :messages">
+					<p:confirm header="Confirmar" message="Deseja realmente publicar este questionário?" icon="ui-icon-alert" />
+					</p:commandButton>
+					
+					<p:commandButton  styleClass="edit-icon" id="unpublish-icon" value="Despublicar" process="@this" 
+						action="#{adminQuestionBean.unpublish()}" rendered="#{adminQuestionBean.questionnaire.published}"  update=":questionTableForm :messages">
+					<p:confirm header="Confirmar" message="Deseja realmente despublicar este questionário?" icon="ui-icon-alert" />
+					</p:commandButton>
+					
+					
+					<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">  
+				        <p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>  
+				        <p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>       
+				    </p:confirmDialog> 
+	    		</div>
+	    		</div>
+
+			</p:panel>
+			
+
+		</h:form>
+
+
+<!-- dialog-->
+		<p:dialog header="Questão" widgetVar="dlgQuestion" resizable="false" height="400px" width="800px" closable="false">
+			
+			<h:form id="formQuestion" >
+				
+				
+				<div id="ul_campos_texto_dialog">
+					<ul>
+						<li><h:inputHidden   value="#{adminQuestionBean.beanQuestion.id}" type="hidden" />
+							<h:outputLabel value="Titulo: " /> <p:inputTextarea value="#{adminQuestionBean.beanQuestion.question}" cols="85"/>
+						</li>
+						<li>
+							<h:outputLabel value="Tipo de questão: " /> 
+							<br />
+							<h:message id="teste" for="selectQuestionType"/>
+							<p:selectOneMenu required="false" id="selectQuestionType" styleClass="inputSimple" value="#{adminQuestionBean.beanQuestion.questionType.id}" 
+							requiredMessage="Tipo de questão é obrigatório." label="questionType" >
+								<f:selectItem itemLabel="Selecione..." itemValue="" />
+								<f:selectItems var="questionType" value="#{adminQuestionBean.questionTypes}" itemLabel="#{questionType.name}" itemValue="#{questionType.id}"/>
+								<p:ajax update="fieldsPanel" event="change"/>
+							</p:selectOneMenu>
+							
+						</li>
+							<h:panelGroup id="fieldsPanel">
+								<h:panelGroup  rendered="#{adminQuestionBean.beanQuestion.questionType.id == 2 || adminQuestionBean.beanQuestion.questionType.id == 3}">								
+								<li>
+									<h:outputLabel value="Opções: " />
+									<h:dataTable id="fields" value="#{adminQuestionBean.newOptions}" var="option" binding="#{table}" > 
+									  <h:column> 
+									  	<h:outputLabel value=" #{table.rowIndex + 1}) " />
+									    <h:inputTextarea value="#{option.description}" cols="85"/>
+									  </h:column>
+									</h:dataTable>
+									<p:commandButton value="Add">
+								        <f:ajax listener="#{adminQuestionBean.addOption}" execute="@form" render="fields"  /> 
+								    </p:commandButton>
+								</li>
+								</h:panelGroup>
+							</h:panelGroup>
+					</ul>
+
+				</div>
+				<div id="dialog_div_buttons" >
+				<p:commandButton id="submitButton"  value="Salvar" rendered="#{empty adminQuestionBean.questionId || adminQuestionBean.questionId==0}"
+						actionListener="#{adminQuestionBean.createQuestion()}" update=":messages :questionTableForm"/>
+						
+				<p:commandButton id="submitUpdateButton"  value="Atualizar" rendered="#{not empty adminQuestionBean.beanQuestion.id}"
+						actionListener="#{adminQuestionBean.updateQuestion()}" update=":messages :questionTableForm">
+						<f:param name="questionId" value="#{adminQuestionBean.beanQuestion.id}" />
+				</p:commandButton>
+						
+				<p:commandButton value="Cancelar" oncomplete="PF('dlgQuestion').hide();"  actionListener="#{adminQuestionBean.resetQuestion()}" update="formQuestion"/>
+				</div>
+			</h:form>
+		</p:dialog>
+	<!-- dialog fim-->
+	</ui:define>
+</ui:composition>
+</html>

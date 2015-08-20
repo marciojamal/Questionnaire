@@ -1,0 +1,36 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core">
+
+<ui:composition template="includes/template.xhtml">
+
+	<ui:define name="conteudo">
+		<div class="content">
+			<h1>Instrução</h1>
+			<p>
+				Para você participar de um questionário é necessário que você preencha o email no campo obrigatório.
+			</p>
+			<p>
+				Após concluir questionário você não pode participar no mesmo novamente.
+			 </p>
+			<h2>Selecione um questionario e participe.</h2>
+			<h:panelGroup id="listQuestionnaires" >
+				<div class="questionarios">
+					<ul>
+						<ui:repeat var="qt" value="#{homeBean.questionnairesHome}" >
+							<li>
+								<h:outputLink value="#{qt.link}">
+									<h:graphicImage library="images" name="#{qt.logoName}" alt="Questionnaire" />#{qt.name}
+								</h:outputLink>
+							</li>
+						</ui:repeat>
+					</ul>
+				</div>
+			</h:panelGroup>
+		</div>
+
+	</ui:define>
+
+</ui:composition>
+</html>

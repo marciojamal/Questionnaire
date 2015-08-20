@@ -1,0 +1,133 @@
+body,div,p,label,img,ul,li,a,table,tr,td,form,input,textarea {
+	margin:0px;
+	padding:0px;
+	font-family: Calibri, 'Noto Sans', Helvetica, Arial sans-serif;
+	font-size:13px; 
+	position: relative;
+}
+
+body{
+	background-color: rgb(240,240,240);
+}
+	
+img {
+	border: none;
+}
+
+.formCreateValidateError{
+	color: red;  
+	display:block;
+	position: absolute;
+	width: 250px;
+}
+
+.topDiv{
+	text-align: right;
+	padding: 15px 20px;
+	height: 70px;
+}
+
+.topDiv .logo{
+	float: left;
+}
+
+.topDiv .logo img{
+	height: 70px;
+}
+
+.topDiv .leave{
+	
+}
+
+.topDiv .leave img{
+	width: 50px;
+}
+
+.footerDiv{
+	height: 20px;
+	text-align: right;
+    padding: 20px;
+}
+
+.menu{
+	margin: 5px 15px;
+}
+
+.menu ul li a span{
+	font-size: 14px !important;
+	font-weight: bold;
+}
+
+#container{
+	margin: 5px 15px;
+}
+
+.listTable{
+	margin: 10px 0;
+}
+
+.newObjectButton{
+	text-align: right;
+}
+.newObjectButtonLeft{
+	float: left;
+}
+.editColum{
+	width: 80px;
+}
+
+.ui-panel .ui-panel-title{
+	font-size: 16px;
+	font-weight: normal;
+}
+
+.inputSimple{
+	width: 550px;
+}
+
+.halfInputSimple{
+	width: 230px;
+}
+
+.inputDate input{
+	width: 150px;
+}
+
+.dateContainer{
+	display: inline-block;
+	margin-right: 50px;
+}
+
+
+
+.createForm tr{
+	border: none;
+}
+
+.createForm tr td{
+	padding: 10px;
+	border: none;
+}
+
+.buttonsColumn{
+	text-align: right;
+}
+
+
+/* CSS dialogs*/
+ 
+ #dialog_div_buttons{
+ margin-top: 15px;
+ margin-left: 10px;
+ 
+ }
+ #dialog_div_buttons button{
+	 margin-right: 12px;
+ 
+ }
+ 
+  #ul_campos_texto_dialog ul li{
+ 	list-style: none;
+ 	width: 110px;
+ 	padding: 8px;
+ }

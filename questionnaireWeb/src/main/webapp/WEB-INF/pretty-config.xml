@@ -1,0 +1,24 @@
+<pretty-config xmlns="http://ocpsoft.com/prettyfaces/3.3.2" 
+               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+               xsi:schemaLocation="http://ocpsoft.com/prettyfaces/3.3.2
+                                   		http://ocpsoft.com/xml/ns/prettyfaces/ocpsoft-pretty-faces-3.3.2.xsd">
+
+
+	<url-mapping id="home"> 
+          <pattern value="/" /> 
+          <view-id value="index.jsf" />
+     </url-mapping>
+     <url-mapping id="question">
+          <pattern value="/questionario/#{questionBean.questionnaireId}" />
+          <view-id value="/question.jsf" />
+     </url-mapping>
+     <url-mapping id="answer">
+          <pattern value="/respostas/#{answerBean.questionnaireId}" />
+          <view-id value="/answer.jsf" />
+     </url-mapping> 
+     <url-mapping id="successAnswer"> 
+          <pattern value="/questionario-respondido-sucesso" /> 
+          <view-id value="successAnswer.jsf" />
+     </url-mapping>       
+
+</pretty-config>

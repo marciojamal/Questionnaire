@@ -1,0 +1,92 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<ui:composition template="includes/template.xhtml">
+	<ui:define name="conteudo">
+		<h:form id="administratorTableForm">
+			<p:panel styleClass="container" id="listAdministratorPanel" header="Administradores">
+
+				<p:dataTable styleClass="listTable" var="administrator" value="#{adminAdministratorBean.administrators}" paginator="true" rows="15"
+					rowsPerPageTemplate="15,30,45" id="AdministratorTable" lazy="true" rendered="#{not empty adminAdministratorBean.administrators}">
+
+					<p:column headerText="Nome"  >
+						<h:outputText value="#{administrator.name}" />
+					</p:column>
+
+					<p:column headerText="Tipo" >
+						<h:outputText value="#{administrator.email}" />
+					</p:column>
+					
+					<p:column styleClass="editColum">
+						<p:commandButton icon="ui-icon-pencil" styleClass="edit-icon" onclick="PF('dlgAdministrator').show()" id="edit-icon" value="Editar" process="@this" 
+						actionListener="#{adminAdministratorBean.resetAdministrator()}"  update=":formAdministrator">
+							<f:param name="administratorId" value="#{administrator.id}" />
+						</p:commandButton>
+					</p:column>
+					<p:column styleClass="editColum">
+						<p:commandButton icon="ui-icon-trash" styleClass="edit-icon" id="remove-icon" value="Excluir" process="@this" 
+							action="#{adminAdministratorBean.removeAdministrator()}"   update=":administratorTableForm :messages">
+							<f:setPropertyActionListener target="#{adminAdministratorBean.beanAdministrator}" value="#{administrator}" />
+							<p:confirm header="Confirmar Exclusão" message="Deseja realmente excluir essa questão?" icon="ui-icon-alert" />
+						</p:commandButton>
+						<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">  
+					        <p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>  
+					        <p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>       
+					    </p:confirmDialog> 
+					</p:column> 
+					
+
+				</p:dataTable>
+				<h:outputLabel value="Não há questões cadastradas." rendered="#{empty adminAdministratorBean.administrators}"/>
+				<div class="newObjectButton">
+					<p:commandButton value="Adicionar"  onclick="PF('dlgAdministrator').show()"  update=":formAdministrator" > 
+					<f:param name="administratorId" value="0" />
+		    		</p:commandButton>
+				
+	    		</div>
+
+			</p:panel>
+			
+
+		</h:form>
+
+
+<!-- dialog-->
+		<p:dialog header="Questão" widgetVar="dlgAdministrator" resizable="false" height="400px" width="800px" closable="false">
+			
+			<h:form id="formAdministrator" >
+				
+				
+				<div id="ul_campos_texto_dialog">
+					<ul>
+						<li><h:inputHidden   value="#{adminAdministratorBean.beanAdministrator.id}" type="hidden" />
+							<h:outputLabel value="Nome: " /> <p:inputText value="#{adminAdministratorBean.beanAdministrator.name}" />
+						</li>
+						<li>
+							<h:outputLabel value="email: " /><p:inputText value="#{adminAdministratorBean.beanAdministrator.email}" disabled="#{not empty adminAdministratorBean.beanAdministrator.id}"/>
+						</li>
+						<li>
+							<h:outputLabel value="Senha: " /><p:inputText value="#{adminAdministratorBean.beanAdministrator.password}" />
+						</li>
+					</ul>
+
+				</div>
+				<div id="dialog_div_buttons" >
+				<p:commandButton id="submitButton"  value="Salvar" rendered="#{empty adminAdministratorBean.administratorId || adminAdministratorBean.administratorId==0}"
+						actionListener="#{adminAdministratorBean.createAdministrator()}" update=":messages :administratorTableForm"/>
+						
+				<p:commandButton id="submitUpdateButton"  value="Atualizar" rendered="#{not empty adminAdministratorBean.beanAdministrator.id}"
+						actionListener="#{adminAdministratorBean.updateAdministrator()}" update=":messages :administratorTableForm">
+						<f:param name="administratorId" value="#{adminAdministratorBean.beanAdministrator.id}" />
+				</p:commandButton>
+						
+				<p:commandButton value="Cancelar" oncomplete="PF('dlgAdministrator').hide();"  actionListener="#{adminAdministratorBean.resetAdministrator()}" update="formAdministrator"/>
+				</div>
+			</h:form>
+		</p:dialog>
+	<!-- dialog fim-->
+	</ui:define>
+</ui:composition>
+</html>

@@ -1,0 +1,157 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions" xmlns:h="http://java.sun.com/jsf/html" xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+<ui:composition template="includes/templateHome.xhtml">
+
+	<ui:param name="leftMenuParam" value="profile" />
+
+	<ui:define name="header"></ui:define>
+
+	<ui:define name="middle">
+		<div id="home_container">
+			<div id="all_posts_container">
+				<div id="scroll_div">
+					<h:panelGroup rendered="#{loginBean.user.profileType.id != 6}">
+						<div id="post_form_container" class="post_container">
+							<hr />
+							<div id="tab_control_arrow">
+								<img style="display: block;" id="tab_control_arrow_up" alt="" src="#{templateBean.path}/images/up_arrow.png" /> <img
+									style="display: none;" id="tab_control_arrow_down" alt="" src="#{templateBean.path}/images/down_arrow.png" />
+							</div>
+							<label class="title">Criar nova postagem pública.</label>
+	
+							<div id="tab_control" style="display: block;">
+								<div id="header">
+									<ul class="abas">
+										<li>
+											<div class="aba">
+												<img alt="" src="#{templateBean.path}/images/video.png" /> <span>Vídeo</span>
+											</div>
+										</li>
+										<li>
+											<div class="aba">
+												<img alt="" src="#{templateBean.path}/images/picture.png" /> <span>Imagens</span>
+											</div>
+										</li>
+										<li>
+											<div class="aba">
+												<img alt="" src="#{templateBean.path}/images/text.png" /> <span>Texto</span>
+											</div>
+										</li>
+	
+									</ul>
+								</div>
+								<div id="content">
+									<div class="conteudo">
+										<h:form id="formPostMessagesVideo">
+											<label>Título:</label>
+											<h:inputText value="#{timeLineBean.newPost.title}" id="postTitleVideo" cols="50" rows="5">
+												<f:validateLength minimum="2" />
+											</h:inputText>
+											<br />
+											<h:message id="postTitleVideoMessage" for="postTitleVideo" style="color: red; display:block;" />
+											<br />
+											<label>URL (link do seu vídeo no Youtube):</label>
+											<h:inputText value="#{timeLineBean.newPost.content}" id="postBodyVideo" cols="50" rows="5">
+												<f:validateLength minimum="2" />
+											</h:inputText>
+											<br />
+											<h:message id="postBodyVideoMessage" for="postBodyVideo" style="color: red; display:block;" />
+											<h:message id="postBodyVideoMessagebt1" for="postBodyVideoMessagebt" style="color: red; display:block;"  />
+											<h:commandButton id="postBodyVideoMessagebt" styleClass="publish_post_button" value="PUBLICAR" action="#{timeLineBean.publishPostVideo}">
+												<f:ajax execute="@form" render=":posts_container postBodyVideoMessage postTitleVideoMessage postBodyVideoMessagebt1" onevent="loader" />
+											</h:commandButton>
+											
+										</h:form>
+	
+									</div>
+	
+									<div class="conteudo">
+										<form id="formPostMessagesImage" enctype="multipart/form-data" action="#{templateBean.path}/UploadControllerServlet" method="post">
+											<label>Título:</label>
+											
+											<input type="text" name="uploadFormType" value="postImage" style="visibility: hidden; height: 1px;" />
+											<input type="text" name="imagePathForm" value="#{templateBean.path}" id="imagePathForm" style="visibility: hidden; height: 1px;" />
+											<input type="text" name="serverImagePathForm" value="#{templateBean.pathImages}" id="serverImagePathForm" style="visibility: hidden; height: 1px;" />
+											
+											<input type="text" name="postTitleImage" id="postTitleImage" />
+											
+											<span id="input_file"> 
+												<label>Imagens</label> 
+												<input id="file_falso">
+												</input> 
+	
+												<span id="input_original"> 
+													<label>Buscar Imagem</label> 
+													<input type="file" name="postBodyImage" id="file_original" multiple="multiple" />
+												</span>
+											</span>
+											
+											<input class="publish_post_button" id="buttonPostMessagesImage" type="button" value="PUBLICAR" />
+											<img style="visibility: hidden;" class="publish_post_loader" src="#{templateBean.path}/images/ajax-loader-geral.gif" width="15" />
+										</form>
+									</div>
+	
+									<div class="conteudo">
+										<h:form id="formPostMessagesText">
+											<label>Título:</label>
+											<h:inputText value="#{timeLineBean.newPost.title}" id="postTitleText" cols="50" rows="5">
+												<f:validateLength minimum="2" />
+											</h:inputText>
+											<h:message id="postTitleTextMessage" for="postTitleText" style="color: red; display:block;" />
+											<br />
+											<label id="message_label">Mensagem:</label>
+											<h:inputTextarea value="#{timeLineBean.newPost.content}" id="postBodyText" cols="50" rows="5">
+												<f:validateLength minimum="2" />
+											</h:inputTextarea>
+											<h:message id="postBodyTextMessage" for="postBodyText" style="color: red; display:block;" />
+											<h:message id="postBodyVideoMessagebt3" for="postBodyVideoMessagebtText" style="color: red; display:block;"  />
+											<h:commandButton id="postBodyVideoMessagebtText" value="PUBLICAR" action="#{timeLineBean.publishPostText}">
+												<f:ajax execute="@form" render=":posts_container postTitleTextMessage postBodyTextMessage postBodyVideoMessagebt3" onevent="loader"/>
+											</h:commandButton>
+										</h:form>
+									</div>
+								</div>
+							</div>
+							
+						</div>
+					</h:panelGroup>
+					<h:panelGroup id="posts_container">
+					<div id="createdImageContainer"></div>
+					
+						<ui:repeat var="post" value="#{timeLineBean.posts}">
+							<ui:insert name="post">
+								<ui:include src="includes/post.xhtml" />
+							</ui:insert>
+						</ui:repeat>
+						<h:panelGroup rendered="#{empty timeLineBean.posts}">
+							Nenhuma postagem na linha do tempo
+						</h:panelGroup>
+
+						<div id="paginationContainer"></div>
+						<div id="paginationLoader" style="display: none;">
+							<img alt="" src="#{templateBean.path}/images/ajax-loader.gif" />
+						</div>
+						<div id="paginationData" style="visibility: hidden;">
+							<input id="paginationLimit" value="#{timeLineBean.paginationLimit}"/> 
+							<input id="paginationLastId" value="#{timeLineBean.paginationLastId}"/> 
+							<input id="paginationTotal" value="#{timeLineBean.paginationTotal}"></input> 
+							<input id="paginationQuantity" value="#{timeLineBean.paginationLimit}"></input> 
+							<input id="imagePath" value="#{templateBean.path}"></input>
+							<input id="serverImagePath" value="#{templateBean.pathImages}" ></input>
+							<input id="keywordSearch" value="#{timeLineBean.keywordSearch}" /> 
+							<input id="pageType" value="index"/>
+						</div>
+						
+						<script>minimizePostText();</script>
+						
+					</h:panelGroup>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>
+
+</html>

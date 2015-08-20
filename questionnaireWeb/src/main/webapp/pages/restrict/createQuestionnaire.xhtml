@@ -1,0 +1,50 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core">
+
+<ui:composition template="includes/template.xhtml">
+
+	<ui:define name="conteudo">
+		<p:panel id="createQuestionnairepanel" header="Novo questionário">
+			<h:form id="userCreateDialogForm" prependId="false">
+
+				<p:panelGrid styleClass="createForm">
+
+					<p:row>
+						<p:column colspan="2">
+							<h:outputLabel for="createQuestionnaireFirstName" value="Nome:*" />
+							<br />
+							<p:inputText styleClass="inputSimple" id="createQuestionnaireFirstName" value="#{adminQuestionnaireBean.beanQuestionnaire.name}"
+								required="true" requiredMessage="Nome é obrigatório" label="Nome">
+								<f:validateLength minimum="2" />
+							</p:inputText>
+						</p:column>
+
+					</p:row>
+
+
+					<p:row>
+						<p:column colspan="2" styleClass="buttonsColumn">
+
+							<p:commandButton rendered="#{empty adminQuestionnaireBean.questionnaireId}" styleClass="btnSave" value="Salvar" icon="ui-icon-plus"
+								action="#{adminQuestionnaireBean.createQuestionnaire}" update=":messages" />
+								
+							<p:commandButton rendered="#{adminQuestionnaireBean.questionnaireId > 0}" styleClass="btnSave" value="Atualizar" icon="ui-icon-plus"
+								action="#{adminQuestionnaireBean.createQuestionnaire}" update=":messages" />
+
+
+							<p:button styleClass="btnCancel" outcome="questionnaireList" value="Cancelar" icon="ui-icon-cancel" />
+
+						</p:column>
+					</p:row>
+
+				</p:panelGrid>
+
+			</h:form>
+		</p:panel>
+
+	</ui:define>
+
+</ui:composition>
+</html>

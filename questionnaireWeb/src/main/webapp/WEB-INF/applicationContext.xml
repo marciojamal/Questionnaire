@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<b:beans xmlns="http://www.springframework.org/schema/security"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns:b="http://www.springframework.org/schema/beans"
+         xsi:schemaLocation="http://www.springframework.org/schema/beans
+ 
+http://www.springframework.org/schema/beans/spring-beans.xsd
+ 
+ 
+http://www.springframework.org/schema/security
+ 
+                            http://www.springframework.org/schema/security/spring-security-3.1.xsd">
+ 
+    <http auto-config="true" use-expressions="true">
+        <intercept-url pattern="/pages/restrict/**" access="hasRole('Admin')"/>
+        
+        <form-login login-page="/login.jsf" authentication-failure-url="/login.jsf?erro=true" default-target-url="/pages/restrict/questionnaireList.jsf" />
+    </http>
+     
+    <authentication-manager>
+        <authentication-provider>
+            <jdbc-user-service data-source-ref="dataSource" 
+                               users-by-username-query="SELECT email as username, password, true as enable FROM questionnaire.administrator WHERE email=?"
+                               authorities-by-username-query="SELECT a.email as username, 'Admin' as authority FROM questionnaire.administrator a where email =?"/>
+                               <password-encoder hash="sha-256" />
+        </authentication-provider>
+        
+    </authentication-manager>
+ 
+    <b:bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource" >
+        <b:property name="url" value="jdbc:mysql://localhost:3306/questionnaire" />
+        <b:property name="driverClassName" value="com.mysql.jdbc.Driver" />
+        <b:property name="username" value="root" />
+        <b:property name="password" value="jamal" />
+    </b:bean>
+ 
+</b:beans>
